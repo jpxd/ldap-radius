@@ -1,0 +1,20 @@
+[radius]
+
+; listen has to be in the format ip:port (or :port to just listen on all interfaces)
+listen = :1812
+
+; your radius secret
+secret = GoblinsEveryWhere!
+
+[ldap]
+
+; host in the form ip:port
+host = 172.16.0.2:389
+
+user = readonly
+password = secretpasswd
+
+basedn = lalala
+filter = (sAMAccountName={{username}})
+
+secure = false
