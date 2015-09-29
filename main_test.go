@@ -9,5 +9,7 @@ import (
 func TestLogin(t *testing.T) {
 	err := gcfg.ReadFileInto(&config, "config.gcfg")
 	check(err, "error reading config.gcfg")
-	t.Logf("ldap auth: %v", ldapLogin("lookup", "uplook"))
+	if ldapLogin("lookup", "uplook") == false {
+		t.Fail()
+	}
 }
