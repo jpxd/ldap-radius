@@ -11,7 +11,7 @@ type radiusService struct{}
 var radiusServer *radius.Server
 
 func (p radiusService) RadiusHandle(request *radius.Packet) *radius.Packet {
-	log.Printf("[auth] New connection, %s for user %s\n", request.Code.String(), request.GetAVP(radius.UserName))
+	log.Printf("[auth] New connection, %s for user %s\n", request.Code.String(), request.GetUsername())
 	npac := request.Reply()
 	switch request.Code {
 	case radius.AccessRequest:
