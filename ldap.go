@@ -17,7 +17,7 @@ func ldapLogin(username, password string) bool {
 	defer ldapConn.Close()
 
 	if config.Ldap.Secure {
-		log.Printf("[ldap] connecting via TLS\n")
+		log.Printf("[ldap] initiating StartTLS\n")
 		err = ldapConn.StartTLS(&tls.Config{InsecureSkipVerify: true})
 		check(err, "could not connect via tls")
 	}
