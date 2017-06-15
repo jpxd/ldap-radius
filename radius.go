@@ -14,20 +14,23 @@ func (p radiusService) RadiusHandle(request *radius.Packet) *radius.Packet {
 	log.Printf("[auth] New connection, %s for user %s\n", request.Code.String(), request.GetUsername())
 	npac := request.Reply()
 	switch request.Code {
+
 	case radius.AccessRequest:
-		if checkCredentials(request.GetUsername(), request.GetPassword()) {
+		if ldapLogin(request.GetUsername(), request.GetPassword()) {
+			log.Printf("[auth] Credentials OK\n")
 			npac.Code = radius.AccessAccept
-			log.Printf("[auth] Is OK\n")
 			return npac
 		}
-		log.Printf("[auth] Is incorrect, Go away!\n")
+		log.Printf("[auth] Credentials are wrong, go away!\n")
 		npac.Code = radius.AccessReject
 		npac.AVPs = append(npac.AVPs, radius.AVP{Type: radius.ReplyMessage, Value: []byte("Go away!")})
 		return npac
+
 	case radius.AccountingRequest:
 		log.Printf("[acct] Accounting request, sending response\n")
 		npac.Code = radius.AccountingResponse
 		return npac
+
 	default:
 		log.Printf("[radius] Access rejected.\n")
 		npac.Code = radius.AccessReject
