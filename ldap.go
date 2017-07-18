@@ -11,17 +11,22 @@ import (
 var ldapConn *ldap.Conn
 
 func ldapLogin(username, password string) bool {
+	log.Printf("[ldap] checking ldap password for %s in server %s\n", username, config.Ldap.Host)
 	ldapConn, err := ldap.Dial("tcp", config.Ldap.Host)
 	check(err, "could not connect to ldap server")
 	defer ldapConn.Close()
 
 	if config.Ldap.Secure {
+		log.Printf("[ldap] initiating StartTLS\n")
 		err = ldapConn.StartTLS(&tls.Config{InsecureSkipVerify: true})
 		check(err, "could not connect via tls")
 	}
 
 	err = ldapConn.Bind(config.Ldap.User, config.Ldap.Password)
 	check(err, "could not bind using ldap lookup user")
+	log.Printf("[ldap] successful bind to LDAP user with user %s\n", config.Ldap.User)
+
+  log.Printf("[ldap] searching ldap tree with %s\n", strings.Replace(config.Ldap.Filter, "{{username}}", username, -1))
 
 	searchRequest := ldap.NewSearchRequest(
 		config.Ldap.BaseDn,
