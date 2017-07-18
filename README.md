@@ -1,7 +1,7 @@
 # ldap-radius
 
-a lightweight radius server written in go which uses ldap (and more) as authentication source
+A lightweight radius server written in go which uses ldap as authentication source.
 
-to configure you have to modify `config_example.gcfg` and copy it to `config.gcfg`
+To configure you have to modify `config_example.gcfg` and copy it to `config.gcfg`.
 
-local authentication options can be added in the `checkLocal` function in `auth.go`
+To build it, just run`go build` in the source directory.
